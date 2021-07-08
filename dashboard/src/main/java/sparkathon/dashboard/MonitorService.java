@@ -37,7 +37,7 @@ public class MonitorService {
             monitorKinesisService();
             monitorCognitoService();
             monitors3Service();
-            //monitorRdsService();
+            monitorRdsService();
         } catch (Exception e) {
             e.printStackTrace();
         }
