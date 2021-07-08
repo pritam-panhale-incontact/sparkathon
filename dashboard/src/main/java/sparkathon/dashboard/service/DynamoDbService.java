@@ -21,16 +21,12 @@ import java.util.Iterator;
 @Service
 public class DynamoDbService {
 
-    @Value("${NICE_STACK_NAME}")
-    private String stackName;
     @Value("${dynamodb.aws.endpoint}")
     private String endpoint;
     @Value("${dynamodb.aws.accesskey}")
     private String accessKey;
     @Value("${dynamodb.aws.secretkey}")
     private String secretKey;
-    @Value("${dynamodb.aws.region:us-west-2}")
-    private String region;
 
     private String tableName = "Test_PersonDetails";
 
@@ -82,17 +78,9 @@ public class DynamoDbService {
             BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
             return AmazonDynamoDBClientBuilder
                     .standard()
-                    //.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region))
                     .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials)).build();
         } else {
             return AmazonDynamoDBClientBuilder.standard().build();
-           /* BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-            return AmazonDynamoDBClientBuilder
-                    .standard()
-                    //.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region))
-                    .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
-                    .withRegion(Regions.US_EAST_1)
-                    .build();*/
         }
     }
 }

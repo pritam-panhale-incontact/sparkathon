@@ -5,10 +5,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import sparkathon.dashboard.service.CognitoService;
-import sparkathon.dashboard.service.DynamoDbService;
-import sparkathon.dashboard.service.KinesisService;
-import sparkathon.dashboard.service.S3Service;
+import sparkathon.dashboard.service.*;
+
+import java.time.LocalDateTime;
 
 @Service
 @EnableScheduling
@@ -26,16 +25,23 @@ public class MonitorService {
     @Autowired
     private S3Service s3Service;
 
+    @Autowired
+    private RdsService rdsService;
+
     @Scheduled(fixedRate = 60000)
     public void ddbServiceScheduler() {
+        System.out.println("------------------------------------------------");
+        System.out.println("Monitoring Started at : " + LocalDateTime.now());
         try {
             monitorDDBService();
             monitorKinesisService();
             monitorCognitoService();
             monitors3Service();
+            //monitorRdsService();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("------------------------------------------------");
     }
 
     @Async
@@ -60,5 +66,11 @@ public class MonitorService {
     public void monitors3Service() {
         System.out.println("Monitoring S3 health");
         s3Service.checkS3Health();
+    }
+
+    @Async
+    public void monitorRdsService() {
+        System.out.println("Monitoring RDS health");
+        rdsService.checkRdsHealth();
     }
 }
